@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AURA - Premium Audio & Electronics</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #999;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 antialiased min-h-screen flex flex-col selection:bg-black selection:text-white">
+
+    <!-- Navigation Bar -->
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-gray-100 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand Logo -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="resetFilters()">
+                    <div class="w-9 h-9 rounded-xl bg-black text-white flex items-center justify-center font-bold text-xl tracking-wider shadow-md">
+                        A
+                    </div>
+                    <span class="text-xl font-bold tracking-tight text-gray-900">AURA <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full font-medium ml-1">AUDIO</span></span>
+                </div>
+
+                <!-- Desktop Search Bar -->
+                <div class="hidden md:flex flex-1 max-w-md mx-8">
+                    <div class="relative w-full">
+                        <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                        <input type="text" id="searchInput" oninput="handleSearch()" placeholder="搜尋耳機、擴大機、智慧音響..." 
+                            class="w-full pl-10 pr-4 py-2 bg-gray-100/80 hover:bg-gray-100 focus:bg-white border border-transparent focus:border-gray-300 rounded-full text-sm transition-all focus:outline-none focus:ring-2 focus:ring-black/5">
+                    </div>
+                </div>
+
+                <!-- Right Action Buttons -->
+                <div class="flex items-center space-x-4">
+                    <button onclick="toggleCart(true)" class="relative p-2 text-gray-700 hover:text-black hover:bg-gray-100 rounded-full transition">
+                        <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+                        <span id="cartBadge" class="hidden absolute -top-1 -right-1 bg-black text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Search Bar -->
+            <div class="pb-3 md:hidden">
+                <div class="relative w-full">
+                    <i data-lucide="search" class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+                    <input type="text" id="mobileSearchInput" oninput="handleSearch(true)" placeholder="搜尋商品..." 
+                        class="w-full pl-10 pr-4 py-2 bg-gray-100 rounded-full text-sm focus:outline-none border border-transparent focus:border-gray-300">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="bg-black text-white py-16 md:py-24 px-4 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 items-center relative z-10">
+            <div class="space-y-6 text-center md:text-left">
+                <span class="inline-block px-3 py-1 bg-white/10 text-white/90 rounded-full text-xs font-semibold tracking-wider uppercase backdrop-blur-sm border border-white/10">
+                    全新旗艦首發
+                </span>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+                    純粹音質，<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 via-gray-400 to-white">完美靜謐。</span>
+                </h1>
+                <p class="text-gray-400 text-base sm:text-lg max-w-xl">
+                    體驗 AURA Studio Pro 旗艦降噪無線耳機，獨家 40mm 鍍鈦振膜單體與主動主動降噪技術，帶給您沉浸式的頂級聽覺盛宴。
+                </p>
+                <div class="pt-2 flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4">
+                    <button onclick="openProductModal(1)" class="w-full sm:w-auto px-8 py-3.5 bg-white text-black font-semibold rounded-full hover:bg-gray-100 transition shadow-lg hover:shadow-white/10">
+                        立即探索
+                    </button>
+                    <a href="#catalog" class="w-full sm:w-auto px-8 py-3.5 border border-white/30 rounded-full font-semibold hover:bg-white/10 transition text-center">
+                        瀏覽所有商品
+                    </a>
+                </div>
+            </div>
+            <div class="relative flex justify-center">
+                <div class="w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-gradient-to-tr from-gray-800 to-gray-600 flex items-center justify-center shadow-2xl relative">
+                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80" 
+                        alt="Flagship Headphone" 
+                        class="w-80 h-80 object-cover rounded-2xl shadow-2xl transform -rotate-6 hover:rotate-0 transition duration-500">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Catalog -->
+    <main id="catalog" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Category & Filter Section -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 tracking-tight">精品聲學與電子產品</h2>
+                <p class="text-sm text-gray-500 mt-1">為追求極致音質與生活品質的您精心打造</p>
+            </div>
+
+            <!-- Categories Tabs -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
+                <button onclick="filterCategory('all')" id="cat-all" class="cat-btn px-4 py-2 rounded-full text-sm font-medium transition whitespace-nowrap bg-black text-white">
+                    全部商品
+                </button>
+                <button onclick="filterCategory('anc')" id="cat-anc" class="cat-btn px-4 py-2 rounded-full text-sm font-medium transition whitespace-nowrap bg-gray-100 text-gray-600 hover:bg-gray-200">
+                    降噪耳機
+                </button>
+                <button onclick="filterCategory('wireless')" id="cat-wireless" class="cat-btn px-4 py-2 rounded-full text-sm font-medium transition whitespace-nowrap bg-gray-100 text-gray-600 hover:bg-gray-200">
+                    真無線藍牙
+                </button>
+                <button onclick="filterCategory('audiophile')" id="cat-audiophile" class="cat-btn px-4 py-2 rounded-full text-sm font-medium transition whitespace-nowrap bg-gray-100 text-gray-600 hover:bg-gray-200">
+                    發燒耳罩/設備
+                </button>
+                <button onclick="filterCategory('speaker')" id="cat-speaker" class="cat-btn px-4 py-2 rounded-full text-sm font-medium transition whitespace-nowrap bg-gray-100 text-gray-600 hover:bg-gray-200">
+                    智慧音響
+                </button>
+            </div>
+        </div>
+
+        <!-- Product Grid -->
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Dynamically populated via JS -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-16">
+            <i data-lucide="package-open" class="w-16 h-16 text-gray-300 mx-auto mb-4"></i>
+            <h3 class="text-lg font-medium text-gray-900">找不到符合條件的商品</h3>
+            <p class="text-sm text-gray-500 mt-1">請嘗試變更搜尋關鍵字或選擇其他分類。</p>
+            <button onclick="resetFilters()" class="mt-4 px-4 py-2 bg-black text-white text-sm font-medium rounded-full hover:bg-gray-800 transition">
+                重設篩選條件
+            </button>
+        </div>
+    </main>
+
+    <!-- Detailed Product View Modal -->
+    <div id="productModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 transition-opacity">
+        <div class="relative bg-white rounded-3xl max-w-4xl w-full overflow-hidden shadow-2xl transition-all transform my-8">
+            <!-- Close Button -->
+            <button onclick="closeProductModal()" class="absolute top-4 right-4 z-10 w-10 h-10 bg-white/80 backdrop-blur hover:bg-white rounded-full flex items-center justify-center text-gray-600 hover:text-black transition shadow-sm border border-gray-100">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <div class="grid grid-cols-1 md:grid-cols-2">
+                <!-- Product Gallery View -->
+                <div class="p-6 bg-gray-50 flex flex-col justify-between">
+                    <div class="relative aspect-square w-full rounded-2xl overflow-hidden bg-white mb-4 border border-gray-100 shadow-inner">
+                        <img id="modalMainImage" src="" alt="Product Image" class="w-full h-full object-cover transition-all duration-300">
+                        <span id="modalTag" class="absolute top-3 left-3 bg-black text-white text-xs font-semibold px-2.5 py-1 rounded-full"></span>
+                    </div>
+                    <!-- Thumbnails -->
+                    <div id="modalThumbnails" class="flex gap-3 overflow-x-auto pb-1">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Product Details & Ordering Form -->
+                <div class="p-6 sm:p-8 flex flex-col justify-between space-y-6">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span id="modalCategory" class="text-xs font-semibold text-gray-400 uppercase tracking-wider"></span>
+                            <div class="flex items-center space-x-1 text-amber-500 text-sm">
+                                <i data-lucide="star" class="w-4 h-4 fill-amber-400 stroke-amber-400"></i>
+                                <span id="modalRating" class="font-bold text-gray-900"></span>
+                                <span id="modalReviews" class="text-gray-400 text-xs"></span>
+                            </div>
+                        </div>
+
+                        <h2 id="modalTitle" class="text-2xl font-bold text-gray-900 tracking-tight mb-2"></h2>
+                        <p id="modalDescription" class="text-sm text-gray-600 leading-relaxed mb-4"></p>
+
+                        <div class="text-2xl font-extrabold text-gray-900 mb-6" id="modalPrice"></div>
+
+                        <hr class="border-gray-100 my-4">
+
+                        <!-- Color Selection Option -->
+                        <div class="mb-5">
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+                                選擇顏色: <span id="selectedColorName" class="text-gray-900 font-normal"></span>
+                            </label>
+                            <div id="modalColorOptions" class="flex items-center space-x-3">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Quantity Selector -->
+                        <div class="mb-6">
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">數量</label>
+                            <div class="inline-flex items-center border border-gray-200 rounded-full p-1 bg-gray-50">
+                                <button onclick="updateModalQuantity(-1)" class="w-8 h-8 rounded-full bg-white hover:bg-gray-100 text-gray-600 flex items-center justify-center font-bold shadow-sm transition">
+                                    <i data-lucide="minus" class="w-3.5 h-3.5"></i>
+                                </button>
+                                <span id="modalQuantity" class="w-12 text-center font-bold text-gray-800 text-sm">1</span>
+                                <button onclick="updateModalQuantity(1)" class="w-8 h-8 rounded-full bg-white hover:bg-gray-100 text-gray-600 flex items-center justify-center font-bold shadow-sm transition">
+                                    <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Product Tech Specs breakdown -->
+                        <div class="bg-gray-50 rounded-2xl p-4 border border-gray-100 mb-6">
+                            <h4 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">技術規格</h4>
+                            <ul id="modalSpecs" class="text-xs text-gray-600 space-y-1.5 list-disc list-inside">
+                                <!-- Populated by JS -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Add to Cart / Buy Actions -->
+                    <div class="space-y-2">
+                        <button onclick="addModalItemToCart()" class="w-full py-3.5 bg-black hover:bg-gray-800 text-white font-semibold rounded-full transition shadow-lg flex items-center justify-center space-x-2">
+                            <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                            <span>加入購物車</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shopping Cart Side Drawer -->
+    <div id="cartDrawer" class="fixed inset-0 z-50 hidden">
+        <!-- Backdrop -->
+        <div onclick="toggleCart(false)" class="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"></div>
+        
+        <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col justify-between">
+                <!-- Cart Header -->
+                <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <i data-lucide="shopping-bag" class="w-5 h-5 text-gray-800"></i>
+                        <h3 class="text-lg font-bold text-gray-900">購物車</h3>
+                    </div>
+                    <button onclick="toggleCart(false)" class="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100 transition">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <!-- Cart Items List -->
+                <div id="cartItemsContainer" class="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
+                    <!-- Populated dynamically -->
+                </div>
+
+                <!-- Cart Footer / Summary -->
+                <div class="p-6 border-t border-gray-100 bg-gray-50 space-y-4">
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between text-gray-500">
+                            <span>小計</span>
+                            <span id="cartSubtotal">$0</span>
+                        </div>
+                        <div class="flex justify-between text-gray-500">
+                            <span>運費</span>
+                            <span class="text-emerald-600 font-medium">免費運送</span>
+                        </div>
+                        <div class="flex justify-between text-base font-extrabold text-gray-900 pt-2 border-t border-gray-200">
+                            <span>總計金額</span>
+                            <span id="cartTotal">$0</span>
+                        </div>
+                    </div>
+
+                    <button onclick="openCheckoutModal()" id="checkoutBtn" class="w-full py-3.5 bg-black hover:bg-gray-800 text-white font-semibold rounded-full transition shadow-lg flex items-center justify-center space-x-2 disabled:bg-gray-300 disabled:cursor-not-allowed">
+                        <span>前往結帳</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative">
+            <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-gray-400 hover:text-black">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">填寫寄送資訊</h3>
+            <p class="text-sm text-gray-500 mb-6">請輸入您的收件資料以完成模擬訂購作業。</p>
+
+            <form id="checkoutForm" onsubmit="handleCheckoutSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">姓名</label>
+                    <input type="text" required placeholder="王小明" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-black">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">電子郵件</label>
+                    <input type="email" required placeholder="student@university.edu.tw" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-black">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">寄送地址</label>
+                    <input type="text" required placeholder="台北市大安區大學路一段1號" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-black">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">付款方式</label>
+                    <select class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-black">
+                        <option>信用卡 / 簽帳金融卡 (模擬)</option>
+                        <option>貨到付款</option>
+                        <option>LINE Pay / Apple Pay (模擬)</option>
+                    </select>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-3.5 bg-black hover:bg-gray-800 text-white font-semibold rounded-full transition shadow-lg">
+                        確認下單
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Order Dialog -->
+    <div id="successModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 text-center shadow-2xl">
+            <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i data-lucide="check-circle" class="w-10 h-10"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">訂單已成功送出！</h3>
+            <p class="text-sm text-gray-500 mb-6">感謝您的測試與購買！我們已收到您的訂單需求。</p>
+            <button onclick="closeSuccessModal()" class="w-full py-3 bg-black text-white font-semibold rounded-full hover:bg-gray-800 transition">
+                返回商店
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer Container -->
+    <footer class="bg-white border-t border-gray-200 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center font-bold text-lg">A</div>
+                        <span class="text-lg font-bold tracking-tight">AURA AUDIO</span>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed">
+                        提供專屬極致音質與高品質聲音美學設備，探索最真實的聲音感動。
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold text-gray-900 uppercase tracking-wider mb-4">產品類別</h4>
+                    <ul class="space-y-2 text-xs text-gray-500">
+                        <li><a href="#catalog" onclick="filterCategory('anc')" class="hover:text-black transition">旗艦降噪耳機</a></li>
+                        <li><a href="#catalog" onclick="filterCategory('wireless')" class="hover:text-black transition">真無線藍牙耳機</a></li>
+                        <li><a href="#catalog" onclick="filterCategory('audiophile')" class="hover:text-black transition">高解析擴大機/耳擴</a></li>
+                        <li><a href="#catalog" onclick="filterCategory('speaker')" class="hover:text-black transition">桌面智慧音響</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold text-gray-900 uppercase tracking-wider mb-4">服務與支援</h4>
+                    <ul class="space-y-2 text-xs text-gray-500">
+                        <li><a href="#" class="hover:text-black transition">購買須知與退換貨</a></li>
+                        <li><a href="#" class="hover:text-black transition">保固登錄</a></li>
+                        <li><a href="#" class="hover:text-black transition">常見問題 FAQ</a></li>
+                        <li><a href="#" class="hover:text-black transition">聯絡客服中心</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold text-gray-900 uppercase tracking-wider mb-4">訂閱電子報</h4>
+                    <p class="text-xs text-gray-500 mb-3">訂閱以獲取最新的產品發表與限定優惠。</p>
+                    <div class="flex gap-2">
+                        <input type="email" placeholder="輸入您的 Email" class="w-full px-3 py-2 bg-gray-100 rounded-xl text-xs border border-transparent focus:bg-white focus:border-gray-300 focus:outline-none">
+                        <button class="px-4 py-2 bg-black text-white text-xs font-medium rounded-xl hover:bg-gray-800 transition">訂閱</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-400 gap-4">
+                <p>&copy; 2026 AURA Audio Inc. All rights reserved.</p>
+                
+                <!-- Mandatory Freshman AI Experiment Disclaimer -->
+                <div class="px-4 py-1.5 bg-gray-100 rounded-full text-gray-600 font-semibold tracking-wide text-xs border border-gray-200">
+                    大一AI實驗用
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Product Data Array
+        const products = [
+            {
+                id: 1,
+                name: "AURA Studio Pro 旗艦降噪耳機",
+                category: "anc",
+                categoryLabel: "降噪耳機",
+                price: 10800,
+                rating: 4.9,
+                reviews: 128,
+                tag: "旗艦熱銷",
+                description: "專為極致聆聽體驗打造，具備雙重主動降噪技術與 40mm 鍍鈦動圈單體，提供長達 35 小時續航力，細緻呈現原音品質。",
+                images: [
+                    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80"
+                ],
+                colors: [
+                    { name: "曜石黑", hex: "#1f2937", img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80" },
+                    { name: "銀雪白", hex: "#e5e7eb", img: "https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=800&q=80" }
+                ],
+                specs: [
+                    "主動降噪：ANC 深度高達 -42dB",
+                    "藍牙版本：Bluetooth 5.3",
+                    "續航時間：開啟 ANC 時高達 35 小時",
+                    "重量：輕量化設計 250 克"
+                ]
+            },
+            {
+                id: 2,
+                name: "AURA Air Pods 真無線降噪耳機",
+                category: "wireless",
+                categoryLabel: "真無線藍牙",
+                price: 4980,
+                rating: 4.8,
+                reviews: 94,
+                tag: "新品上架",
+                description: "輕巧入耳式設計，搭配晶透聲學音室與環境音通透模式，適合運動與日常通勤無縫切換。",
+                images: [
+                    "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?auto=format&fit=crop&w=800&q=80"
+                ],
+                colors: [
+                    { name: "純淨白", hex: "#f3f4f6", img: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=800&q=80" },
+                    { name: "海軍藍", hex: "#1e3a8a", img: "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?auto=format&fit=crop&w=800&q=80" }
+                ],
+                specs: [
+                    "防水等級：IPX5 生活防水防汗",
+                    "充電盒續航：總續航可達 28 小時",
+                    "通話品質：三麥克風通話降噪",
+                    "快速充電：充電 10 分鐘即可播放 2 小時"
+                ]
+            },
+            {
+                id: 3,
+                name: "AURA Heritage 發燒級開放式耳機",
+                category: "audiophile",
+                categoryLabel: "發燒耳罩",
+                price: 18500,
+                rating: 5.0,
+                reviews: 42,
+                tag: "專業發燒推薦",
+                description: "為音樂發燒友打造的開放式耳罩耳機，擁有寬廣無比的聲場表現與頂級木質音腔，重現錄音室現場的震撼細節。",
+                images: [
+                    "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=800&q=80"
+                ],
+                colors: [
+                    { name: "胡桃木色", hex: "#78350f", img: "https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=800&q=80" }
+                ],
+                specs: [
+                    "單體類型：50mm 平面振膜單體",
+                    "頻率響應：5Hz - 45,000Hz",
+                    "阻抗：32 歐姆 (易於推動)",
+                    "線材：單晶銅可拆卸平衡線"
+                ]
+            },
+            {
+                id: 4,
+                name: "AURA SoundCube 復古桌面藍牙音響",
+                category: "speaker",
+                categoryLabel: "智慧音響",
+                price: 6200,
+                rating: 4.7,
+                reviews: 76,
+                tag: "設計首選",
+                description: "融合經典復古美學與現代無線聲學工藝，雙高音單體與低音反射孔，讓空間充滿溫暖飽滿的音樂氛圍。",
+                images: [
+                    "https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=800&q=80",
+                    "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80"
+                ],
+                colors: [
+                    { name: "復古金", hex: "#d97706", img: "https://images.unsplash.com/photo-1545454675-3531b543be5d?auto=format&fit=crop&w=800&q=80" },
+                    { name: "極簡白", hex: "#e5e7eb", img: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=800&q=80" }
+                ],
+                specs: [
+                    "輸出功率：Peak 60W",
+                    "連接方式：Bluetooth 5.2 / AUX 3.5mm",
+                    "控制面板：金屬旋鈕精密控制",
+                    "電源：內建電池支援 12 小時連續播放"
+                ]
+            },
+            {
+                id: 5,
+                name: "AURA Pocket DAC 掌上型耳擴解碼器",
+                category: "audiophile",
+                categoryLabel: "發燒設備",
+                price: 3680,
+                rating: 4.8,
+                reviews: 31,
+                tag: "高音質解碼",
+                description: "小巧便攜的 Type-C 高解析 DAC 耳擴，支援 Hi-Res 32bit/384kHz 解碼，讓手機秒變行動音樂工作站。",
+                images: [
+                    "https://images.unsplash.com/photo-1528148343865-51218c4a13e6?auto=format&fit=crop&w=800&q=80"
+                ],
+                colors: [
+                    { name: "太空灰", hex: "#4b5563", img: "https://images.unsplash.com/photo-1528148343865-51218c4a13e6?auto=format&fit=crop&w=800&q=80" }
+                ],
+                specs: [
+                    "晶片方案：Flagship ESS SABRE DAC",
+                    "輸出介面：3.5mm 單端 / 4.4mm 平衡",
+                    "材質：全鋁合金 CNC 精密雕刻",
+                    "相容性：iOS / Android / Windows / Mac"
+                ]
+            },
+            {
+                id: 6,
+                name: "AURA Sport Active 頸掛式降噪運動耳機",
+                category: "anc",
+                categoryLabel: "降噪耳機",
+                price: 3200,
+                rating: 4.6,
+                reviews: 58,
+                tag: "運動首選",
+                description: "專為高強度運動設計的親膚矽膠頸掛式耳機，磁吸收納與穩固配戴，具備動態低音增強技術。",
+                images: [
+                    "https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?auto=format&fit=crop&w=800&q=80"
+                ],
+                colors: [
+                    { name: "動感黑", hex: "#111827", img: "https://images.unsplash.com/photo-1572536147248-ac59a8abfa4b?auto=format&fit=crop&w=800&q=80" }
+                ],
+                specs: [
+                    "防水等級：IPX7 高階防水",
+                    "續航時間：20 小時播放",
+                    "快速充電：充電 5 分鐘可用 1.5 小時",
+                    "特色：磁吸自動關機/暫停"
+                ]
+            }
+        ];
+
+        // State Management
+        let cart = [];
+        let activeCategory = 'all';
+        let activeSearch = '';
+        let currentModalProduct = null;
+        let modalSelectedColor = null;
+        let modalQuantity = 1;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+            updateCartUI();
+            lucide.createIcons();
+        });
+
+        function renderProducts() {
+            const grid = document.getElementById('productGrid');
+            const emptyState = document.getElementById('emptyState');
+            grid.innerHTML = '';
+
+            const filtered = products.filter(p => {
+                const matchesCategory = activeCategory === 'all' || p.category === activeCategory;
+                const matchesSearch = p.name.toLowerCase().includes(activeSearch.toLowerCase()) || 
+                                      p.description.toLowerCase().includes(activeSearch.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                filtered.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = "group bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between";
+                    card.innerHTML = `
+                        <div>
+                            <div class="relative aspect-square overflow-hidden bg-gray-100 cursor-pointer" onclick="openProductModal(${product.id})">
+                                <img src="${product.images[0]}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                                ${product.tag ? `<span class="absolute top-3 left-3 bg-black/80 backdrop-blur-md text-white text-[11px] font-semibold px-2.5 py-1 rounded-full">${product.tag}</span>` : ''}
+                                <button onclick="event.stopPropagation(); openProductModal(${product.id})" class="absolute bottom-3 right-3 bg-white/90 hover:bg-white text-gray-900 p-2.5 rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition duration-300 transform translate-y-2 group-hover:translate-y-0">
+                                    <i data-lucide="eye" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                            <div class="p-5">
+                                <div class="flex items-center justify-between text-xs text-gray-400 mb-1">
+                                    <span>${product.categoryLabel}</span>
+                                    <div class="flex items-center space-x-1 text-amber-400">
+                                        <i data-lucide="star" class="w-3.5 h-3.5 fill-amber-400"></i>
+                                        <span class="font-bold text-gray-800">${product.rating}</span>
+                                    </div>
+                                </div>
+                                <h3 onclick="openProductModal(${product.id})" class="font-bold text-gray-900 text-base group-hover:text-gray-600 transition cursor-pointer line-clamp-1">${product.name}</h3>
+                                <p class="text-xs text-gray-500 mt-1 line-clamp-2 leading-relaxed">${product.description}</p>
+                            </div>
+                        </div>
+                        <div class="px-5 pb-5 pt-0 flex items-center justify-between mt-2">
+                            <span class="text-lg font-extrabold text-gray-900">NT$ ${product.price.toLocaleString()}</span>
+                            <button onclick="quickAddToCart(${product.id})" class="px-3.5 py-2 bg-black hover:bg-gray-800 text-white rounded-full text-xs font-semibold transition flex items-center space-x-1 shadow-md">
+                                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                                <span>購買</span>
+                            </button>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+            lucide.createIcons();
+        }
+
+        // Filtering and Search Logic
+        function filterCategory(cat) {
+            activeCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = "cat-btn px-4 py-2 rounded-full text-sm font-medium transition whitespace-nowrap bg-gray-100 text-gray-600 hover:bg-gray-200";
+            });
+            const activeBtn = document.getElementById(`cat-${cat}`);
+            if(activeBtn) {
+                activeBtn.className = "cat-btn px-4 py-2 rounded-full text-sm font-medium transition whitespace-nowrap bg-black text-white";
+            }
+            renderProducts();
+        }
+
+        function handleSearch(isMobile = false) {
+            const input = isMobile ? document.getElementById('mobileSearchInput') : document.getElementById('searchInput');
+            activeSearch = input.value;
+            renderProducts();
+        }
+
+        function resetFilters() {
+            activeCategory = 'all';
+            activeSearch = '';
+            document.getElementById('searchInput').value = '';
+            document.getElementById('mobileSearchInput').value = '';
+            filterCategory('all');
+        }
+
+        function openProductModal(id) {
+            currentModalProduct = products.find(p => p.id === id);
+            if (!currentModalProduct) return;
+
+            modalQuantity = 1;
+            modalSelectedColor = currentModalProduct.colors[0];
+
+            document.getElementById('modalMainImage').src = modalSelectedColor.img || currentModalProduct.images[0];
+            document.getElementById('modalTitle').innerText = currentModalProduct.name;
+            document.getElementById('modalCategory').innerText = currentModalProduct.categoryLabel;
+            document.getElementById('modalRating').innerText = currentModalProduct.rating;
+            document.getElementById('modalReviews').innerText = `(${currentModalProduct.reviews} 則評價)`;
+            document.getElementById('modalDescription').innerText = currentModalProduct.description;
+            document.getElementById('modalPrice').innerText = `NT$ ${currentModalProduct.price.toLocaleString()}`;
+            document.getElementById('modalTag').innerText = currentModalProduct.tag || "熱銷商品";
+            document.getElementById('modalQuantity').innerText = modalQuantity;
+
+            // Render Thumbnails
+            const thumbContainer = document.getElementById('modalThumbnails');
+            thumbContainer.innerHTML = '';
+            currentModalProduct.images.forEach((imgSrc, idx) => {
+                const thumb = document.createElement('button');
+                thumb.className = `w-14 h-14 rounded-xl overflow-hidden border-2 transition ${idx === 0 ? 'border-black' : 'border-transparent opacity-70 hover:opacity-100'}`;
+                thumb.innerHTML = `<img src="${imgSrc}" class="w-full h-full object-cover">`;
+                thumb.onclick = () => {
+                    document.getElementById('modalMainImage').src = imgSrc;
+                    Array.from(thumbContainer.children).forEach(c => c.classList.replace('border-black', 'border-transparent'));
+                    thumb.classList.replace('border-transparent', 'border-black');
+                };
+                thumbContainer.appendChild(thumb);
+            });
+
+            // Render Color Swatches
+            const colorContainer = document.getElementById('modalColorOptions');
+            colorContainer.innerHTML = '';
+            document.getElementById('selectedColorName').innerText = modalSelectedColor.name;
+
+            currentModalProduct.colors.forEach(col => {
+                const colorBtn = document.createElement('button');
+                colorBtn.className = `w-7 h-7 rounded-full border-2 transition flex items-center justify-center ${col.name === modalSelectedColor.name ? 'ring-2 ring-black ring-offset-2 border-transparent' : 'border-gray-200'}`;
+                colorBtn.style.backgroundColor = col.hex;
+                colorBtn.onclick = () => {
+                    modalSelectedColor = col;
+                    document.getElementById('selectedColorName').innerText = col.name;
+                    if (col.img) document.getElementById('modalMainImage').src = col.img;
+                    openProductModal(id); // re-render swatch ring state
+                };
+                colorContainer.appendChild(colorBtn);
+            });
+
+            // Specs
+            const specsList = document.getElementById('modalSpecs');
+            specsList.innerHTML = '';
+            currentModalProduct.specs.forEach(spec => {
+                const li = document.createElement('li');
+                li.innerText = spec;
+                specsList.appendChild(li);
+            });
+
+            document.getElementById('productModal').classList.remove('hidden');
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').classList.add('hidden');
+        }
+
+        function updateModalQuantity(delta) {
+            modalQuantity = Math.max(1, modalQuantity + delta);
+            document.getElementById('modalQuantity').innerText = modalQuantity;
+        }
+
+        function quickAddToCart(id) {
+            const prod = products.find(p => p.id === id);
+            addToCart(prod, prod.colors[0], 1);
+        }
+
+        function addModalItemToCart() {
+            if (currentModalProduct) {
+                addToCart(currentModalProduct, modalSelectedColor, modalQuantity);
+                closeProductModal();
+            }
+        }
+
+        function addToCart(product, color, qty) {
+            const existingIndex = cart.findIndex(item => item.id === product.id && item.color.name === color.name);
+            if (existingIndex > -1) {
+                cart[existingIndex].qty += qty;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: color.img || product.images[0],
+                    color: color,
+                    qty: qty
+                });
+            }
+            updateCartUI();
+            toggleCart(true);
+        }
+
+        function updateCartQuantity(index, delta) {
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cartItemsContainer');
+            const badge = document.getElementById('cartBadge');
+            const subtotalEl = document.getElementById('cartSubtotal');
+            const totalEl = document.getElementById('cartTotal');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+
+            const totalCount = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            if (totalCount > 0) {
+                badge.innerText = totalCount;
+                badge.classList.remove('hidden');
+                checkoutBtn.disabled = false;
+            } else {
+                badge.classList.add('hidden');
+                checkoutBtn.disabled = true;
+            }
+
+            subtotalEl.innerText = `NT$ ${totalAmount.toLocaleString()}`;
+            totalEl.innerText = `NT$ ${totalAmount.toLocaleString()}`;
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-gray-400">
+                        <i data-lucide="shopping-bag" class="w-12 h-12 mx-auto mb-3 opacity-40"></i>
+                        <p class="text-sm font-medium">購物車目前是空的</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = '';
+                cart.forEach((item, index) => {
+                    const cartItem = document.createElement('div');
+                    cartItem.className = "flex items-center space-x-4 p-3 bg-gray-50 rounded-2xl border border-gray-100";
+                    cartItem.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}" class="w-16 h-16 object-cover rounded-xl bg-white border border-gray-200">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs font-bold text-gray-900 truncate">${item.name}</h4>
+                            <p class="text-[11px] text-gray-400 mt-0.5">顏色: ${item.color.name}</p>
+                            <p class="text-xs font-extrabold text-gray-900 mt-1">NT$ ${(item.price * item.qty).toLocaleString()}</p>
+                        </div>
+                        <div class="flex items-center border border-gray-200 rounded-full bg-white px-2 py-1 space-x-2">
+                            <button onclick="updateCartQuantity(${index}, -1)" class="text-gray-500 hover:text-black">
+                                <i data-lucide="minus" class="w-3 h-3"></i>
+                            </button>
+                            <span class="text-xs font-bold text-gray-800">${item.qty}</span>
+                            <button onclick="updateCartQuantity(${index}, 1)" class="text-gray-500 hover:text-black">
+                                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(cartItem);
+                });
+            }
+            lucide.createIcons();
+        }
+
+        function toggleCart(show) {
+            const drawer = document.getElementById('cartDrawer');
+            if (show) drawer.classList.remove('hidden');
+            else drawer.classList.add('hidden');
+        }
+
+        function openCheckoutModal() {
+            if (cart.length === 0) return;
+            toggleCart(false);
+            document.getElementById('checkoutModal').classList.remove('hidden');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkoutModal').classList.add('hidden');
+        }
+
+        function handleCheckoutSubmit(e) {
+            e.preventDefault();
+            closeCheckoutModal();
+            cart = [];
+            updateCartUI();
+            document.getElementById('successModal').classList.remove('hidden');
+        }
+
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
